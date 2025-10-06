@@ -1,1 +1,1 @@
-Example Google News Requeset form in ServiceNow
+Example Google News Request form in ServiceNow; it's a ServiceNow Catalog Item
