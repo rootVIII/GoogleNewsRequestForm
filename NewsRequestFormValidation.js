@@ -24,11 +24,14 @@ function onSubmit() {
         ga.addParam('sysparm_name', 'getStatus');
         // note: can pass parameters to script include if needed in request:
         // ga.addParam('keyname', someVariable);
+
+        // getXMLWait won't work in ServicePortal, async version is needed for that
 		ga.getXMLWait();
         var result = JSON.parse(ga.getAnswer());
 
         // Ensure at least one section selected and that it is a valid section still:
         // TODO:
+
         alert(result.join(', '));
         return true;
     } catch (err) {
