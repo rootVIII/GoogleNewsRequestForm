@@ -1,38 +1,37 @@
-// Catalog Item Client Script
-
 function displayError(msg, fieldName) {
     g_form.addErrorMessage(msg);
     if (fieldName !== null)
-        g_form.showFieldMsg(fieldName, msg, 'error');
-}
-
-function getNewsSections(result) {
-	if (result) {
-		alert(JSON.parse(result));
-	} else {
-		alert('Nothing in answer');
-	}
+        g_form.showFieldMsg(fieldName, msg, 'error', false);
 }
 
 function onSubmit() {
-    var selectedSections = [
-        g_form.getValue('gnrfWorld'),
-        g_form.getValue('gnrfUS'),
-        g_form.getValue('gnrfBusiness'),
-        g_form.getValue('gnrfEntertainment'),
-        g_form.getValue('gnrfTechnology'),
-        g_form.getValue('gnrfSports'),
-        g_form.getValue('gnrfScience'),
-        g_form.getValue('gnrfHealth'),
-    ];
-    alert(selectedSections.join(','));
-	try {
-		var ga = new GlideAjax('OkSurfRequestNewsSections');
-		ga.addParam('sysparm_name', 'getStatus');
-		// note: can pass parameters to script include if needed in request:
-		// ga.addParam('keyname', someVariable);
-		ga.getXMLAnswer(getNewsSections);
-	} catch(err) {
-		g_form.addErrorMessage(err);
-	}
+    try {
+        if (g_form.getValue('gnrfReason').toString().length < 24) {
+            displayError('Provide an in depth reason for the request', 'gnrfReason');
+        }
+        var selectedSections = {
+            World: g_form.getValue('gnrfWorld').toString(),
+            US: g_form.getValue('gnrfUS').toString(),
+            Business: g_form.getValue('gnrfBusiness').toString(),
+            Entertainment: g_form.getValue('gnrfEntertainment').toString(),
+            Technology: g_form.getValue('gnrfTechnology').toString(),
+            Sports: g_form.getValue('gnrfSports').toString(),
+            Science: g_form.getValue('gnrfScience').toString(),
+            Health: g_form.getValue('gnrfHealth').toString(),
+        };
+        var ga = new GlideAjax('OkSurfRequestNewsSections');
+        ga.addParam('sysparm_name', 'getStatus');
+        // note: can pass parameters to script include if needed in request:
+        // ga.addParam('keyname', someVariable);
+		ga.getXMLWait();
+        var result = JSON.parse(ga.getAnswer());
+
+        // Ensure at least one section selected and that it is a valid section still:
+        // TODO:
+        alert(result.join(', '));
+        return true;
+    } catch (err) {
+        g_form.addErrorMessage(err);
+        return false;
+    }
 }
