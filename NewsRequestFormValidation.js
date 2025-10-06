@@ -8,6 +8,7 @@ function onSubmit() {
     try {
         if (g_form.getValue('gnrfReason').toString().length < 24) {
             displayError('Provide an in depth reason for the request', 'gnrfReason');
+			return false;
         }
         var selectedSections = {
             World: g_form.getValue('gnrfWorld').toString(),
