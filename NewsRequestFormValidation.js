@@ -8,7 +8,7 @@ function onSubmit() {
     try {
         if (g_form.getValue('gnrfReason').toString().length < 24) {
             displayError('Provide an in depth reason for the request', 'gnrfReason');
-			return false;
+            return false;
         }
         var selectedSections = {
             World: g_form.getValue('gnrfWorld').toString(),
@@ -24,15 +24,24 @@ function onSubmit() {
         ga.addParam('sysparm_name', 'getStatus');
         // note: can pass parameters to script include if needed in request:
         // ga.addParam('keyname', someVariable);
+        ga.getXMLWait();
 
-        // getXMLWait won't work in ServicePortal, async version is needed for that
-		ga.getXMLWait();
         var result = JSON.parse(ga.getAnswer());
-
-        // Ensure at least one section selected and that it is a valid section still:
-        // TODO:
-
-        alert(result.join(', '));
+        // Ensure at least one section selected and that it is still a valid news section
+        var isValid = false;
+        for (var key in selectedSections) {
+            if (!(result.includes(key))) {
+                displayError('Selected news section is no longer valid: ' + key, 'gnrfTextLabel1');
+                return false;
+            }
+            if (selectedSections[key] === 'true') {
+                isValid = true;
+            }
+        }
+        if (!(isValid)) {
+            displayError('Please select at least one news section');
+            return false;
+        }
         return true;
     } catch (err) {
         g_form.addErrorMessage(err);
