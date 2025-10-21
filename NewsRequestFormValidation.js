@@ -20,7 +20,7 @@ function onSubmit() {
             Science: g_form.getValue('gnrfScience') === 'true',
             Health: g_form.getValue('gnrfHealth') === 'true',
         };
-        var ga = new GlideAjax('OkSurfRequestNewsSections');
+        var ga = new GlideAjax('OkSurfRequestNewsSectionNames');
         ga.addParam('sysparm_name', 'getStatus');
         // note: can pass parameters to script include if needed in request:
         // ga.addParam('keyname', someVariable);
