@@ -26,7 +26,7 @@ function getNews(titles) {
 function writeNewsTableEntry() {
     var gr = new GlideRecord('u_google_news_requests');
     gr.initialize();
-    gr.u_ritm = current.sys_id;
+    gr.u_ritm = current.number;
     gr.insert();
 }
 
